@@ -8,7 +8,11 @@ import java.util.Scanner;
 /**
  * 
  * @author Omar Taylor
- *
+ * This class scans through a data set of 100000 ratings by 943 users on 1682 items
+ * and sorts them into a database.
+ * 
+ * Issues: The buildDatabase(String data) function is statically implemented. It needs
+ * to be dynamic.
  */
 public class Database {
 
