@@ -23,10 +23,11 @@ public class Database {
 
 	/**
 	 * Initialize the Database
-	 * @throws FileNotFoundException 
+	 * 
+	 * @throws FileNotFoundException
 	 */
-	public Database() throws FileNotFoundException {
-		writeToArray(0);
+	public Database() {
+
 	}
 
 	/**
@@ -77,22 +78,26 @@ public class Database {
 		}
 		sc.close();
 	}
-	
+
 	/**
+	 * @throws FileNotFoundException
 	 * 
 	 */
-	public void buildDatabaseDynamic()
-	{
-		
+	public void buildDatabaseDynamic() throws FileNotFoundException {
+		writeToArray(0);
+
+		int userID = 0;
+		int itemID = 0;
+		int rating = 0;
 	}
-	
+
 	/**
 	 * This function separates each column into their own respective files
+	 * 
 	 * @param data
 	 * @throws FileNotFoundException
 	 */
-	private void separateCols(String data) throws FileNotFoundException
-	{
+	private void separateCols(String data) throws FileNotFoundException {
 		Scanner sc = new Scanner(new File(data));
 		PrintWriter users = new PrintWriter("u_usersonly.txt");
 		PrintWriter movies = new PrintWriter("u_moviesonly.txt");
@@ -130,8 +135,8 @@ public class Database {
 	}
 
 	/**
-	 * Creates and array of movies, users, and ratings.
-	 * listRatings, listMovies, and listUsers first
+	 * Creates and array of movies, users, and ratings. listRatings, listMovies,
+	 * and listUsers first
 	 * 
 	 * @param data
 	 * @param array
