@@ -3,6 +3,7 @@ package project1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -104,7 +105,6 @@ public class Database {
 	public void listItemIDs(String data) throws FileNotFoundException {
 		Scanner sc = new Scanner(new File(data));
 		PrintWriter pw = new PrintWriter("u_moviesonly.txt");
-		pw.write(".:Movie IDs:.\n");
 		while (sc.hasNextInt()) {
 			sc.nextInt(); // throw away userID
 			pw.write(sc.nextInt() + "\n");
@@ -125,7 +125,6 @@ public class Database {
 	public void listUserIDs(String data) throws FileNotFoundException {
 		Scanner sc = new Scanner(new File(data));
 		PrintWriter pw = new PrintWriter("u_usersonly.txt");
-		pw.write(".:User IDs:.\n");
 		while (sc.hasNextInt()) {
 			pw.write(sc.nextInt() + "\n");
 			sc.nextInt(); // throw away itemID
@@ -146,7 +145,6 @@ public class Database {
 	public void listRatings(String data) throws FileNotFoundException {
 		Scanner sc = new Scanner(new File(data));
 		PrintWriter pw = new PrintWriter("u_ratingsonly.txt");
-		pw.write(".:Ratings:.\n");
 		while (sc.hasNextInt()) {
 			sc.nextInt(); // throw away userID
 			sc.nextInt(); // throw away itemID
@@ -155,5 +153,67 @@ public class Database {
 		}
 		pw.close();
 		sc.close();
+	}
+
+	/**
+	 * Creates and array of movies, users, and ratings.
+	 * 
+	 * @param data
+	 * @param array
+	 * @throws FileNotFoundException
+	 */
+	public int[] writeToArray(int array) throws FileNotFoundException {
+		if (array == 0) {
+			Scanner sc;
+			int length = 0;
+			for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); sc.nextInt()) {
+				length++;
+			}
+
+			int[] movies = new int[length];
+
+			length = 0;
+			for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); length++) {
+				movies[length] = sc.nextInt();
+			}
+			sc.close();
+
+			return movies;
+		} else if (array == 1) {
+			Scanner sc;
+			int length = 0;
+			for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); sc.nextInt()) {
+				length++;
+			}
+
+			int[] users = new int[length];
+
+			length = 0;
+			for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); length++) {
+				users[length] = sc.nextInt();
+			}
+			sc.close();
+
+			return users;
+		} else if (array == 2) {
+			Scanner sc;
+			int length = 0;
+			for (sc = new Scanner(new File("u_ratingsonly.txt")); sc.hasNextInt(); sc.nextInt()) {
+				length++;
+			}
+
+			int[] ratings = new int[length];
+
+			length = 0;
+			for (sc = new Scanner(new File("u_ratingsonly.txt")); sc.hasNextInt(); length++) {
+				ratings[length] = sc.nextInt();
+			}
+			sc.close();
+
+			return ratings;
+		} else {
+			System.out.println("Invalid entry!");
+			return null;
+		}
 	}
 }
