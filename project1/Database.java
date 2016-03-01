@@ -3,7 +3,6 @@ package project1;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -18,12 +17,16 @@ public class Database {
 
 	String[][] database = new String[5][5]; // ItemID is the first index and
 											// UserID is the second
+	int[] movies;
+	int[] users;
+	int[] ratings;
 
 	/**
 	 * Initialize the Database
+	 * @throws FileNotFoundException 
 	 */
-	public Database() {
-
+	public Database() throws FileNotFoundException {
+		writeToArray(0);
 	}
 
 	/**
@@ -33,7 +36,7 @@ public class Database {
 	 * @param data
 	 * @throws FileNotFoundException
 	 */
-	public void buildDatabase(String data) throws FileNotFoundException {
+	public void buildDatabaseStatic(String data) throws FileNotFoundException {
 		Scanner sc = new Scanner(new File(data));
 
 		int userID = 0;
@@ -74,6 +77,37 @@ public class Database {
 		}
 		sc.close();
 	}
+	
+	/**
+	 * 
+	 */
+	public void buildDatabaseDynamic()
+	{
+		
+	}
+	
+	/**
+	 * This function separates each column into their own respective files
+	 * @param data
+	 * @throws FileNotFoundException
+	 */
+	private void separateCols(String data) throws FileNotFoundException
+	{
+		Scanner sc = new Scanner(new File(data));
+		PrintWriter users = new PrintWriter("u_usersonly.txt");
+		PrintWriter movies = new PrintWriter("u_moviesonly.txt");
+		PrintWriter ratings = new PrintWriter("u_ratingsonly.txt");
+		while (sc.hasNextInt()) {
+			users.write(sc.nextInt() + "\n");
+			movies.write(sc.nextInt() + "\n");
+			ratings.write(sc.nextInt() + "\n");
+			sc.nextInt(); // throw away time stamp
+		}
+		users.close();
+		movies.close();
+		ratings.close();
+		sc.close();
+	}
 
 	/**
 	 * This function scans in u.txt and writes to a new file without the time
@@ -96,73 +130,15 @@ public class Database {
 	}
 
 	/**
-	 * This function parses the u.txt to only include the itemIDs in a new file
-	 * 
-	 * @param data
-	 *            The file
-	 * @throws FileNotFoundException
-	 */
-	public void listItemIDs(String data) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File(data));
-		PrintWriter pw = new PrintWriter("u_moviesonly.txt");
-		while (sc.hasNextInt()) {
-			sc.nextInt(); // throw away userID
-			pw.write(sc.nextInt() + "\n");
-			sc.nextInt(); // throw away rating
-			sc.nextInt(); // throw away time stamp
-		}
-		pw.close();
-		sc.close();
-	}
-
-	/**
-	 * This function parses the u.txt to only include the userIDs in a new file
-	 * 
-	 * @param data
-	 *            The file
-	 * @throws FileNotFoundException
-	 */
-	public void listUserIDs(String data) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File(data));
-		PrintWriter pw = new PrintWriter("u_usersonly.txt");
-		while (sc.hasNextInt()) {
-			pw.write(sc.nextInt() + "\n");
-			sc.nextInt(); // throw away itemID
-			sc.nextInt(); // throw away rating
-			sc.nextInt(); // throw away time stamp
-		}
-		pw.close();
-		sc.close();
-	}
-
-	/**
-	 * This function parses the u.txt to only include the ratings in a new file
-	 * 
-	 * @param data
-	 *            The file
-	 * @throws FileNotFoundException
-	 */
-	public void listRatings(String data) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File(data));
-		PrintWriter pw = new PrintWriter("u_ratingsonly.txt");
-		while (sc.hasNextInt()) {
-			sc.nextInt(); // throw away userID
-			sc.nextInt(); // throw away itemID
-			pw.write(sc.nextInt() + "\n");
-			sc.nextInt(); // throw away time stamp
-		}
-		pw.close();
-		sc.close();
-	}
-
-	/**
 	 * Creates and array of movies, users, and ratings.
+	 * listRatings, listMovies, and listUsers first
 	 * 
 	 * @param data
 	 * @param array
 	 * @throws FileNotFoundException
 	 */
-	public int[] writeToArray(int array) throws FileNotFoundException {
+	private int[] writeToArray(int array) throws FileNotFoundException {
+		separateCols("u.txt");
 		if (array == 0) {
 			Scanner sc;
 			int length = 0;
@@ -170,7 +146,7 @@ public class Database {
 				length++;
 			}
 
-			int[] movies = new int[length];
+			movies = new int[length];
 
 			length = 0;
 			for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); length++) {
@@ -186,7 +162,7 @@ public class Database {
 				length++;
 			}
 
-			int[] users = new int[length];
+			users = new int[length];
 
 			length = 0;
 			for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); length++) {
@@ -202,7 +178,7 @@ public class Database {
 				length++;
 			}
 
-			int[] ratings = new int[length];
+			ratings = new int[length];
 
 			length = 0;
 			for (sc = new Scanner(new File("u_ratingsonly.txt")); sc.hasNextInt(); length++) {
