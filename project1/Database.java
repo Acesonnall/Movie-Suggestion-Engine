@@ -15,30 +15,71 @@ import java.util.Scanner;
  */
 public class Database {
 
-	String[][] database = new String[5][5]; // ItemID is the first index and
+	String[][] staticDb = new String[5][5]; // ItemID is the first index and
 											// UserID is the second
-	int[] movies;
-	int[] users;
-	int[] ratings;
+
+	private int[][] matrix;
+	private int[] ratings; // Not sure if necessary
+
+	private int M; // number of rows
+	private int N; // number of columns
 
 	/**
-	 * Initialize the Database
-	 * 
-	 * @throws FileNotFoundException
+	 * Create empty database
 	 */
 	public Database() {
 
 	}
 
 	/**
-	 * Searches through given file and sorts the data in a 2D array
-	 * ([userID][itemID])
+	 * Create M-by-N matrix of 0's
+	 * 
+	 * @throws FileNotFoundException
+	 */
+	public Database(int M, int N) {
+		this.M = M;
+		this.N = N;
+		matrix = new int[M][N];
+	}
+
+	/**
+	 * Initialize database based on previous database
+	 * 
+	 * @param data
+	 */
+	public Database(int[][] matrix) {
+		M = matrix.length;
+		N = matrix[0].length;
+		this.matrix = new int[M][N];
+		for (int i = 0; i < M; i++)
+			for (int j = 0; j < N; j++)
+				this.matrix[i][j] = matrix[i][j];
+	}
+
+	/**
+	 * Work in progress... POSSIBLE SOLUTION: I could not properly sort the
+	 * database in the static version because I did not know to properly sort
+	 * the data without duplication. However, it is possible to sort the matrix
+	 * by the bucket sort method and checking for duplicates either via checking
+	 * if the element at the index is not null or by creating an array of
+	 * counters set to zero
+	 * 
+	 * @throws FileNotFoundException
+	 */
+	public void buildDynamic() throws FileNotFoundException {
+		setUp();
+	}
+
+	/**
+	 * Searches through given file and sorts the data in a 2D array (matrix)
+	 * called the database.
+	 *
 	 * 
 	 * @param data
 	 * @throws FileNotFoundException
 	 */
-	public void buildDatabaseStatic(String data) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File(data));
+	public void buildStatic() throws FileNotFoundException {
+		Scanner sc = new Scanner(new File("u_parsed.txt"));
 
 		int userID = 0;
 		int itemID = 0;
@@ -63,15 +104,15 @@ public class Database {
 			// Rating].
 			// String consists of numbers for easy processing
 			if (itemID == 242 && i < 5) {
-				database[0][i++] = userID + " " + itemID + " " + rating;
+				staticDb[0][i++] = userID + " " + itemID + " " + rating;
 			} else if (itemID == 302 && j < 5) {
-				database[1][j++] = userID + " " + itemID + " " + rating;
+				staticDb[1][j++] = userID + " " + itemID + " " + rating;
 			} else if (itemID == 377 && k < 5) {
-				database[2][k++] = userID + " " + itemID + " " + rating;
+				staticDb[2][k++] = userID + " " + itemID + " " + rating;
 			} else if (itemID == 51 && l < 5) {
-				database[3][l++] = userID + " " + itemID + " " + rating;
+				staticDb[3][l++] = userID + " " + itemID + " " + rating;
 			} else if (itemID == 346 && m < 5) {
-				database[4][m++] = userID + " " + itemID + " " + rating;
+				staticDb[4][m++] = userID + " " + itemID + " " + rating;
 			} else {
 				continue;
 			}
@@ -80,25 +121,13 @@ public class Database {
 	}
 
 	/**
-	 * @throws FileNotFoundException
-	 * 
-	 */
-	public void buildDatabaseDynamic() throws FileNotFoundException {
-		writeToArray(0);
-
-		int userID = 0;
-		int itemID = 0;
-		int rating = 0;
-	}
-
-	/**
 	 * This function separates each column into their own respective files
 	 * 
 	 * @param data
 	 * @throws FileNotFoundException
 	 */
-	private void separateCols(String data) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File(data));
+	public void separateCols() throws FileNotFoundException {
+		Scanner sc = new Scanner(new File("u.txt"));
 		PrintWriter users = new PrintWriter("u_usersonly.txt");
 		PrintWriter movies = new PrintWriter("u_moviesonly.txt");
 		PrintWriter ratings = new PrintWriter("u_ratingsonly.txt");
@@ -112,6 +141,25 @@ public class Database {
 		movies.close();
 		ratings.close();
 		sc.close();
+	}
+
+	public void sortLists() throws FileNotFoundException {
+		Scanner sc = new Scanner(new File("u_usersonly.txt"));
+		PrintWriter users = new PrintWriter("u_users_sorted.txt");
+		int user = 0;
+
+		while (sc.hasNextInt()) {
+			user = sc.nextInt();
+			/*
+			 * if () {
+			 * 
+			 * }
+			 */
+		}
+	}
+
+	public void removeDuplicates() {
+
 	}
 
 	/**
@@ -142,59 +190,41 @@ public class Database {
 	 * @param array
 	 * @throws FileNotFoundException
 	 */
-	private int[] writeToArray(int array) throws FileNotFoundException {
-		separateCols("u.txt");
-		if (array == 0) {
-			Scanner sc;
-			int length = 0;
-			for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); sc.nextInt()) {
-				length++;
-			}
+	private void setUp() throws FileNotFoundException {
+		removeDuplicates();
 
-			movies = new int[length];
+		Scanner sc;
+		int mLength = 0;
+		int uLength = 0;
+		int rLength = 0;
+		for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); sc.nextInt())
+			mLength++;
+		for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); sc.nextInt())
+			uLength++;
+		matrix = new int[uLength][mLength]; // when uLength and mLenth are
+											// 100000, this operation allocates
+											// a 10,000,000,000 element two
+											// dimensional int array. That's
+											// ~40gbs of memory! Please remove
+											// duplicate entries from the length
+											// calculation!
 
-			length = 0;
-			for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); length++) {
-				movies[length] = sc.nextInt();
-			}
-			sc.close();
+		mLength = 0;
+		for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); mLength++)
+			matrix[0][mLength] = sc.nextInt();
 
-			return movies;
-		} else if (array == 1) {
-			Scanner sc;
-			int length = 0;
-			for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); sc.nextInt()) {
-				length++;
-			}
+		uLength = 0;
+		for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); uLength++)
+			matrix[uLength][0] = sc.nextInt();
 
-			users = new int[length];
+		for (sc = new Scanner(new File("u_ratingsonly.txt")); sc.hasNextInt(); sc.nextInt())
+			rLength++;
 
-			length = 0;
-			for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); length++) {
-				users[length] = sc.nextInt();
-			}
-			sc.close();
+		ratings = new int[rLength];
 
-			return users;
-		} else if (array == 2) {
-			Scanner sc;
-			int length = 0;
-			for (sc = new Scanner(new File("u_ratingsonly.txt")); sc.hasNextInt(); sc.nextInt()) {
-				length++;
-			}
-
-			ratings = new int[length];
-
-			length = 0;
-			for (sc = new Scanner(new File("u_ratingsonly.txt")); sc.hasNextInt(); length++) {
-				ratings[length] = sc.nextInt();
-			}
-			sc.close();
-
-			return ratings;
-		} else {
-			System.out.println("Invalid entry!");
-			return null;
-		}
+		rLength = 0;
+		for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); rLength++)
+			ratings[rLength] = sc.nextInt();
+		sc.close();
 	}
 }
