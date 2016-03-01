@@ -7,8 +7,9 @@ public class Implementation {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		Database d = new Database();
-		d.buildDatabase("u_parsed.txt");
-		System.out.println(Arrays.deepToString(d.database));
+		// d.buildDatabase("u_parsed.txt");
+		// d.listRatings("u.txt");
+		// System.out.println(Arrays.deepToString(d.database));
 	}
 
 }

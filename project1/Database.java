@@ -7,16 +7,16 @@ import java.util.Scanner;
 
 /**
  * 
- * @author Omar Taylor
- * This class scans through a data set of 100000 ratings by 943 users on 1682 items
- * and sorts them into a database.
+ * @author Omar Taylor This class scans through a data set of 100000 ratings by
+ *         943 users on 1682 items and sorts them into a database.
  * 
- * Issues: The buildDatabase(String data) function is statically implemented. It needs
- * to be dynamic.
+ *         Issues: The buildDatabase(String data) function is statically
+ *         implemented. It needs to be dynamic.
  */
 public class Database {
 
-	String[][] database = new String[5][5]; // ItemID is the first index and UserID is the second
+	String[][] database = new String[5][5]; // ItemID is the first index and
+											// UserID is the second
 
 	/**
 	 * Initialize the Database
@@ -38,12 +38,11 @@ public class Database {
 		int userID = 0;
 		int itemID = 0;
 		int rating = 0;
-		
+
 		/*
-		 * UserIDs are hard-coded i, j, k, l, and m.
-		 * ItemIDs are hard-coded as 0, 1, 2, 3, and 4.
-		 * Have not yet found a way to process both counts automatically
-		 * rather than manually
+		 * UserIDs are hard-coded i, j, k, l, and m. ItemIDs are hard-coded as
+		 * 0, 1, 2, 3, and 4. Have not yet found a way to process both counts
+		 * automatically rather than manually
 		 */
 		int i = 0;
 		int j = 0;
@@ -55,7 +54,8 @@ public class Database {
 			itemID = sc.nextInt(); // Get itemID
 			rating = sc.nextInt(); // Get rating
 
-			// Stores the database input in the following format: [UserID ItemID Rating].
+			// Stores the database input in the following format: [UserID ItemID
+			// Rating].
 			// String consists of numbers for easy processing
 			if (itemID == 242 && i < 5) {
 				database[0][i++] = userID + " " + itemID + " " + rating;
@@ -75,9 +75,11 @@ public class Database {
 	}
 
 	/**
-	 * Method scans in a file and writes to a new file without the time stamp
+	 * This function scans in u.txt and writes to a new file without the time
+	 * stamp
+	 * 
 	 * @param data
-	 *    The file
+	 *            The file
 	 * @throws FileNotFoundException
 	 */
 	public void removeTimeStamp(String data) throws FileNotFoundException {
@@ -86,6 +88,69 @@ public class Database {
 
 		while (sc.hasNextInt()) {
 			pw.write(sc.nextInt() + " " + sc.nextInt() + " " + sc.nextInt() + "\n");
+			sc.nextInt(); // throw away time stamp
+		}
+		pw.close();
+		sc.close();
+	}
+
+	/**
+	 * This function parses the u.txt to only include the itemIDs in a new file
+	 * 
+	 * @param data
+	 *            The file
+	 * @throws FileNotFoundException
+	 */
+	public void listItemIDs(String data) throws FileNotFoundException {
+		Scanner sc = new Scanner(new File(data));
+		PrintWriter pw = new PrintWriter("u_moviesonly.txt");
+		pw.write(".:Movie IDs:.\n");
+		while (sc.hasNextInt()) {
+			sc.nextInt(); // throw away userID
+			pw.write(sc.nextInt() + "\n");
+			sc.nextInt(); // throw away rating
+			sc.nextInt(); // throw away time stamp
+		}
+		pw.close();
+		sc.close();
+	}
+
+	/**
+	 * This function parses the u.txt to only include the userIDs in a new file
+	 * 
+	 * @param data
+	 *            The file
+	 * @throws FileNotFoundException
+	 */
+	public void listUserIDs(String data) throws FileNotFoundException {
+		Scanner sc = new Scanner(new File(data));
+		PrintWriter pw = new PrintWriter("u_usersonly.txt");
+		pw.write(".:User IDs:.\n");
+		while (sc.hasNextInt()) {
+			pw.write(sc.nextInt() + "\n");
+			sc.nextInt(); // throw away itemID
+			sc.nextInt(); // throw away rating
+			sc.nextInt(); // throw away time stamp
+		}
+		pw.close();
+		sc.close();
+	}
+
+	/**
+	 * This function parses the u.txt to only include the ratings in a new file
+	 * 
+	 * @param data
+	 *            The file
+	 * @throws FileNotFoundException
+	 */
+	public void listRatings(String data) throws FileNotFoundException {
+		Scanner sc = new Scanner(new File(data));
+		PrintWriter pw = new PrintWriter("u_ratingsonly.txt");
+		pw.write(".:Ratings:.\n");
+		while (sc.hasNextInt()) {
+			sc.nextInt(); // throw away userID
+			sc.nextInt(); // throw away itemID
+			pw.write(sc.nextInt() + "\n");
 			sc.nextInt(); // throw away time stamp
 		}
 		pw.close();
