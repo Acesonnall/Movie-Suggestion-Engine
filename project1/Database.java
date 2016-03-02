@@ -10,8 +10,7 @@ import java.util.Scanner;
  * @author Omar Taylor This class scans through a data set of 100000 ratings by
  *         943 users on 1682 items and sorts them into a database.
  * 
- *         Issues: The buildDatabase(String data) function is statically
- *         implemented. It needs to be dynamic.
+ *         Known Issues:
  */
 public class Database {
 
@@ -27,7 +26,8 @@ public class Database {
 
 	/**
 	 * Create empty database
-	 * @throws FileNotFoundException 
+	 * 
+	 * @throws FileNotFoundException
 	 */
 	public Database() throws FileNotFoundException {
 		separateCols();
@@ -59,29 +59,24 @@ public class Database {
 	}
 
 	/**
-	 * Work in progress... POSSIBLE SOLUTION: I could not properly sort the
-	 * database in the static version because I did not know to properly sort
-	 * the data without duplication. However, it is possible to sort the matrix
-	 * by the bucket sort method and checking for duplicates either via checking
-	 * if the element at the index is not null or by creating an array of
-	 * counters set to zero
+	 * Searches through given file and sorts the data in a dynamically
+	 * implemented 2D array (matrix) called the database.
 	 * 
 	 * @throws FileNotFoundException
 	 */
 	public void buildDynamic() throws FileNotFoundException {
 		setUp();
 		Scanner sc = new Scanner(new File("u_parsed.txt"));
-		
-		while (sc.hasNextInt())
-		{
+
+		while (sc.hasNextInt()) {
 			matrix[sc.nextInt()][sc.nextInt()] = sc.nextInt();
 		}
 		sc.close();
 	}
 
 	/**
-	 * Searches through given file and sorts the data in a 2D array (matrix)
-	 * called the database.
+	 * Searches through given file and sorts the data in a statically
+	 * implemented 2D array (matrix) called the database.
 	 *
 	 * 
 	 * @param data
@@ -95,9 +90,9 @@ public class Database {
 		int rating = 0;
 
 		/*
-		 * UserIDs are hard-coded i, j, k, l, and m. ItemIDs are hard-coded as
-		 * 0, 1, 2, 3, and 4. Have not yet found a way to process both counts
-		 * automatically rather than manually
+		 * SOLVED: UserIDs are hard-coded i, j, k, l, and m. ItemIDs are
+		 * hard-coded as 0, 1, 2, 3, and 4. Have not yet found a way to process
+		 * both counts automatically rather than manually
 		 */
 		int i = 0;
 		int j = 0;
@@ -162,18 +157,16 @@ public class Database {
 			int temp = sc.nextInt();
 			counters[temp] = 1;
 		}
-		
-		for (int i = 0; i < counters.length; i++)
-		{
-			if (counters[i] == 1)
-			{
+
+		for (int i = 0; i < counters.length; i++) {
+			if (counters[i] == 1) {
 				length++;
 			}
 		}
-		
+
 		sc.close();
-		int[] array = new int[length+1];
-		
+		int[] array = new int[length + 1];
+
 		for (length = 0; length <= array.length; length++) {
 			if (counters[length] == 0) {
 				continue;
@@ -206,8 +199,7 @@ public class Database {
 	}
 
 	/**
-	 * Creates and array of movies, users, and ratings. listRatings, listMovies,
-	 * and listUsers first
+	 * Creates a matrix of movies (columns), users (rows), and ratings (data).
 	 * 
 	 * @param data
 	 * @param array
@@ -228,13 +220,7 @@ public class Database {
 		sc.close();
 		this.movies = removeDuplicates(f1, "u_movies_nodup.txt", mLength);
 		this.users = removeDuplicates(f2, "u_users_nodup.txt", uLength);
-		matrix = new int[this.users.length][this.movies.length]; // when uLength and mLenth are
-											// 100000, this operation allocates
-											// a 10,000,000,000 element two
-											// dimensional int array. That's
-											// ~40gbs of memory! Please remove
-											// duplicate entries from the length
-											// calculation!
+		matrix = new int[this.users.length][this.movies.length];
 
 		for (mLength = 0; mLength < matrix[0].length; mLength++)
 			matrix[0][mLength] = this.movies[mLength];
