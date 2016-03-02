@@ -2,7 +2,6 @@ package project1;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 public class Implementation {
 
@@ -27,5 +26,6 @@ public class Implementation {
 		}
 
 		pw.write(result.toString());
+		pw.close();
 	}
 }

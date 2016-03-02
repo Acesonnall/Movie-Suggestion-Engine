@@ -76,6 +76,7 @@ public class Database {
 		{
 			matrix[sc.nextInt()][sc.nextInt()] = sc.nextInt();
 		}
+		sc.close();
 	}
 
 	/**
