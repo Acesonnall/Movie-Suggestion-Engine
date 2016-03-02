@@ -18,17 +18,19 @@ public class Database {
 	String[][] staticDb = new String[5][5]; // ItemID is the first index and
 											// UserID is the second
 
-	private int[][] matrix;
-	private int[] ratings; // Not sure if necessary
+	public int[][] matrix;
+	private int[] movies;
+	private int[] users;
 
 	private int M; // number of rows
 	private int N; // number of columns
 
 	/**
 	 * Create empty database
+	 * @throws FileNotFoundException 
 	 */
-	public Database() {
-
+	public Database() throws FileNotFoundException {
+		separateCols();
 	}
 
 	/**
@@ -126,7 +128,7 @@ public class Database {
 	 * @param data
 	 * @throws FileNotFoundException
 	 */
-	public void separateCols() throws FileNotFoundException {
+	private void separateCols() throws FileNotFoundException {
 		Scanner sc = new Scanner(new File("u.txt"));
 		PrintWriter users = new PrintWriter("u_usersonly.txt");
 		PrintWriter movies = new PrintWriter("u_moviesonly.txt");
@@ -143,23 +145,37 @@ public class Database {
 		sc.close();
 	}
 
-	public void sortLists() throws FileNotFoundException {
-		Scanner sc = new Scanner(new File("u_usersonly.txt"));
-		PrintWriter users = new PrintWriter("u_users_sorted.txt");
-		int user = 0;
+	private int[] removeDuplicates(File in, String out, int l) throws FileNotFoundException {
+		Scanner sc = new Scanner(in);
+		PrintWriter pw = new PrintWriter(out);
+		int[] counters = new int[l];
+		int length = 0;
 
 		while (sc.hasNextInt()) {
-			user = sc.nextInt();
-			/*
-			 * if () {
-			 * 
-			 * }
-			 */
+			int temp = sc.nextInt();
+			counters[temp] = 1;
 		}
-	}
-
-	public void removeDuplicates() {
-
+		
+		for (int i = 0; i < counters.length; i++)
+		{
+			if (counters[i] == 1)
+			{
+				length++;
+			}
+		}
+		
+		sc.close();
+		int[] array = new int[length+1];
+		
+		for (length = 0; length <= array.length; length++) {
+			if (counters[length] == 0) {
+				continue;
+			}
+			pw.write(length + "\n");
+			array[length] = length;
+		}
+		pw.close();
+		return array;
 	}
 
 	/**
@@ -191,17 +207,21 @@ public class Database {
 	 * @throws FileNotFoundException
 	 */
 	private void setUp() throws FileNotFoundException {
-		removeDuplicates();
-
 		Scanner sc;
 		int mLength = 0;
 		int uLength = 0;
-		int rLength = 0;
-		for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); sc.nextInt())
+		File f1 = new File("u_moviesonly.txt");
+		File f2 = new File("u_usersonly.txt");
+
+		for (sc = new Scanner(f1); sc.hasNextInt(); sc.nextInt())
 			mLength++;
-		for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); sc.nextInt())
+		sc.close();
+		for (sc = new Scanner(f2); sc.hasNextInt(); sc.nextInt())
 			uLength++;
-		matrix = new int[uLength][mLength]; // when uLength and mLenth are
+		sc.close();
+		this.movies = removeDuplicates(f1, "u_movies_nodup", mLength);
+		this.users = removeDuplicates(f2, "u_users_nodup", uLength);
+		matrix = new int[this.users.length][this.movies.length]; // when uLength and mLenth are
 											// 100000, this operation allocates
 											// a 10,000,000,000 element two
 											// dimensional int array. That's
@@ -209,22 +229,9 @@ public class Database {
 											// duplicate entries from the length
 											// calculation!
 
-		mLength = 0;
-		for (sc = new Scanner(new File("u_moviesonly.txt")); sc.hasNextInt(); mLength++)
-			matrix[0][mLength] = sc.nextInt();
-
-		uLength = 0;
-		for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); uLength++)
-			matrix[uLength][0] = sc.nextInt();
-
-		for (sc = new Scanner(new File("u_ratingsonly.txt")); sc.hasNextInt(); sc.nextInt())
-			rLength++;
-
-		ratings = new int[rLength];
-
-		rLength = 0;
-		for (sc = new Scanner(new File("u_usersonly.txt")); sc.hasNextInt(); rLength++)
-			ratings[rLength] = sc.nextInt();
-		sc.close();
+		for (mLength = 0; mLength < matrix[0].length; mLength++)
+			matrix[0][mLength] = this.movies[mLength];
+		for (uLength = 0; uLength < matrix.length; uLength++)
+			matrix[uLength][0] = this.users[uLength];
 	}
 }
