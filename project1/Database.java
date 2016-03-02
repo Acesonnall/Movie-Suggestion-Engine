@@ -70,6 +70,12 @@ public class Database {
 	 */
 	public void buildDynamic() throws FileNotFoundException {
 		setUp();
+		Scanner sc = new Scanner(new File("u_parsed.txt"));
+		
+		while (sc.hasNextInt())
+		{
+			matrix[sc.nextInt()][sc.nextInt()] = sc.nextInt();
+		}
 	}
 
 	/**
@@ -219,8 +225,8 @@ public class Database {
 		for (sc = new Scanner(f2); sc.hasNextInt(); sc.nextInt())
 			uLength++;
 		sc.close();
-		this.movies = removeDuplicates(f1, "u_movies_nodup", mLength);
-		this.users = removeDuplicates(f2, "u_users_nodup", uLength);
+		this.movies = removeDuplicates(f1, "u_movies_nodup.txt", mLength);
+		this.users = removeDuplicates(f2, "u_users_nodup.txt", uLength);
 		matrix = new int[this.users.length][this.movies.length]; // when uLength and mLenth are
 											// 100000, this operation allocates
 											// a 10,000,000,000 element two
