@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * @author Omar Taylor
  *         3/4/2016
- * BUGS: getTopX() is not able to list top movies in ascending order without a NULL value for the element in the last index
+ *         BUGS: getTopX() is not able to list top movies in ascending order without a NULL value for the element in the last index
  */
 public class SuggestionEngine extends Database {
 

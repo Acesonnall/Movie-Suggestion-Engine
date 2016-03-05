@@ -10,7 +10,9 @@ import java.io.FileNotFoundException;
 public class Implementation {
 
     public static void main(String[] args) throws FileNotFoundException {
-        SuggestionEngine s = new SuggestionEngine();
-        s.getTopX(20000);
+//        SuggestionEngine s = new SuggestionEngine();
+//        s.getTopX(50);
+
+        Movies m = new Movies("C:\\Users\\O\\Documents\\GitHub\\Intellij IDEA\\Movie Suggestion Engine\\ml-100k\\ml-100k\\u.item.txt");
     }
 }
