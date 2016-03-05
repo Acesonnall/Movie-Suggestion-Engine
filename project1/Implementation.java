@@ -11,6 +11,6 @@ public class Implementation {
 
     public static void main(String[] args) throws FileNotFoundException {
         SuggestionEngine s = new SuggestionEngine();
-        s.getTopFive();
+        s.getTopX(20000);
     }
 }
