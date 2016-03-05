@@ -232,9 +232,10 @@ public class Database {
         // iterate over the first dimension
         for (int[] aMatrix : matrix) {
             // iterate over the second dimension
-            for (int j = 0; j < aMatrix.length; j++)
-                if (j != aMatrix.length - 1) pw.print(aMatrix[j] + ", ");
-                else pw.print(aMatrix[j]); // remove the last separator
+            for (int j = 0; j < aMatrix.length; j++) {
+                if (j != aMatrix.length - 1) pw.printf("%4d| ", aMatrix[j]);
+                else pw.printf("%4d", aMatrix[j]);
+            }
             pw.println(); // add a line break.
         }
         pw.close();
