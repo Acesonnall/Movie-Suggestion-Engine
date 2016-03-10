@@ -5,5 +5,7 @@ Database dataset used: http://grouplens.org/datasets/movielens/100k/
 https://en.wikipedia.org/wiki/Recommender_system
 
 Programming: Omar and Souparni
+
 Mathematical Analysis: Conghui
+
 Project Mentor: Dr. Chinmay Hedge | Iowa State University, ECpE Dept. | Assistant Professor
